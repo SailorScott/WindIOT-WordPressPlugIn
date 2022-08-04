@@ -1,0 +1,23 @@
+Particle.io webhooks for connecting electrons to the wider web. 
+
+Event Name: BatteryStats
+URL: https://www.YOURWEBSITE.org/api/battery/create.php
+Request Type: POST
+Request Format: Custom Body
+Device: Any
+Status: Enabled
+Advanced Settings
+    Custom Request Body: {{{PARTICLE_EVENT_VALUE}}}
+    HTTP Headers: Content Type > application/json
+    Enforce SSL: Yes
+
+
+other Webhooks:
+Event Name: TempC
+URL: https://www.YOURWEBSITE.org/api/temperature/create.php
+
+Event Name: WindMPH
+URL: https://www.YOURWEBSITE.org/api/wind/create.php
+
+Event Name: PressWave
+URL: https://www.YOURWEBSITE.org/api/pressureWave/create.php

@@ -7,18 +7,44 @@ $batteryArray  = array();
 
 
 function TemperatureLookup($sampleTime) {
+     // Temp data is every 20 mintues. Passed in time is every 10 mintues. 
+   // look for closest.
    global $temperaturesArray;
-   $lastReading = 0;
    $airTemp = "";
    $waterTemp = "";
+   $lastTimeDelta = 10000;
+   static $lastSampleTime = 0;
+   $currentTimeDelta = 0;
+   $lastAirTemp = "";
+   $lastWaterTemp = "";
+
    foreach($temperaturesArray as $row)
    {
-      if ( $sampleTime == $row["SampleTime"]) {
-      // $lastReading = $row["SampleTime"];
-        $airTemp = number_format(($row["Air"]* 9/5) + 32);
-        $waterTemp = number_format(($row["Water"]* 9/5) + 32); 
-        break;   
-     }
+      $currentTimeDelta = $row["SampleTime"] - $sampleTime;
+      if ($currentTimeDelta  < 0) {
+
+            if ($lastSampleTime <> $row["SampleTime"] ) {
+               $lastSampleTime = $row["SampleTime"];
+
+               if (abs($currentTimeDelta) <= abs($lastTimeDelta)) {
+                     $airTemp = number_format(($row["Air"]* 9/5) + 32);
+                     $waterTemp = number_format(($row["Water"]* 9/5) + 32); 
+               } else {
+                  $airTemp = $lastAirTemp; 
+                  $waterTemp = $lastWaterTemp;
+               }
+            } else {
+               $airTemp = "";
+               $waterTemp = "";
+            }
+        break;  
+
+     } else {
+      $lastTimeDelta = $currentTimeDelta;
+      $lastAirTemp = number_format(($row["Air"]* 9/5) + 32);
+      $lastWaterTemp = number_format(($row["Water"]* 9/5) + 32); 
+      }
+  
      
    }
 
@@ -29,17 +55,38 @@ function TemperatureLookup($sampleTime) {
 }
 
 function BatteryLevelLookup($sampleTime) {
+   // Battery data is every 20 mintues. Passed in time is every 10 mintues. 
+   // look for closest.
    global $batteryArray;
    $battLevel = "";
-   $sampleTimeLow = $sampleTime - 100;
-   $sampleTimeHigh = $sampleTime + 100;
-   
+   $lastTimeDelta = 10000;
+   static $lastSampleTime = 0;
+   $currentTimeDelta = 0;
+   $lastBattLevel = "";
+
+     
    foreach($batteryArray as $row)
    {
  
-      if ( $row["SampleTime"] >= $sampleTimeLow && $row["SampleTime"] <= $sampleTimeHigh ) {
-         $battLevel = $row["StateOfCharge"];
-        break;   
+      $currentTimeDelta = $row["SampleTime"] - $sampleTime;
+      if ($currentTimeDelta  < 0) {
+
+            if ($lastSampleTime <> $row["SampleTime"] ) {
+               $lastSampleTime = $row["SampleTime"];
+
+               if (abs($currentTimeDelta) <= abs($lastTimeDelta)) {
+                  $battLevel = $row["StateOfCharge"];
+               } else {
+                  $battLevel = $lastBattLevel; 
+               }
+            } else {
+               $battLevel = "";
+            }
+        break;  
+
+     } else {
+      $lastTimeDelta = $currentTimeDelta;
+      $lastBattLevel = $row["StateOfCharge"];
      }
      
    }

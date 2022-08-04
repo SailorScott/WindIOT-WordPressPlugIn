@@ -1,0 +1,60 @@
+--wp_WindIOT_Battery
+CREATE TABLE `wp_WindIOT_Battery` (
+ `Location` char(10) NOT NULL,
+ `SampleTime` int(11) unsigned NOT NULL,
+ `StateOfCharge` float DEFAULT NULL,
+ `TIMESTAMP` datetime DEFAULT current_timestamp(),
+ `ResetsCntr` int(11) DEFAULT NULL,
+ `AngleFail` int(11) DEFAULT NULL,
+ `CompassFail` int(11) DEFAULT NULL,
+ `TempAirFail` int(11) DEFAULT NULL,
+ `TempWaterFail` int(11) DEFAULT NULL,
+ `TempBoxFail` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Location`,`SampleTime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+--wp_WindIOT_RawJSON
+CREATE TABLE `wp_WindIOT_RawJSON` (
+ `ID` int(11) NOT NULL AUTO_INCREMENT,
+ `TimeStamp` datetime NOT NULL,
+ `JSON` varchar(500) NOT NULL,
+ PRIMARY KEY (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=235 DEFAULT CHARSET=latin1
+
+-- wp_WindIOT_Temperatures	
+CREATE TABLE `wp_WindIOT_Temperatures` (
+ `Location` char(10) NOT NULL,
+ `SampleTime` int(11) unsigned NOT NULL,
+ `Air` float DEFAULT NULL,
+ `Water` float DEFAULT NULL,
+ `ControlBox` float DEFAULT NULL,
+ `TIMESTAMP` datetime DEFAULT current_timestamp(),
+ PRIMARY KEY (`Location`,`SampleTime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+--wp_WindIOT_Wind	
+CREATE TABLE `wp_WindIOT_Wind` (
+ `Location` char(10) NOT NULL,
+ `SampleTime` int(11) unsigned NOT NULL,
+ `Speed` float DEFAULT NULL,
+ `GUST` float DEFAULT NULL,
+ `Direction` smallint(3) DEFAULT NULL,
+ `TIMESTAMP` datetime DEFAULT current_timestamp(),
+ PRIMARY KEY (`Location`,`SampleTime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+
+-- Update for adding pressure sensor to estimate waves.
+
+ALTER TABLE `wp_WindIOT_Battery` ADD  `PressureFail` int(11) DEFAULT NULL;
+
+CREATE TABLE `wp_WindIOT_PressureWave` (
+ `Location` char(10) NOT NULL,
+ `SampleTime` int(11) unsigned NOT NULL,
+ `AbsPressPa` float DEFAULT NULL,
+ `SigWaveHtFt` float DEFAULT NULL,
+ `BiggestWaveFt` float DEFAULT NULL,
+ `CountWave` smallint(3) DEFAULT NULL,
+ `TIMESTAMP` datetime DEFAULT current_timestamp(),
+ PRIMARY KEY (`Location`,`SampleTime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8

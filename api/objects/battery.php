@@ -17,6 +17,7 @@ class Battery{
     public $TempAirFail;
     public $TempWaterFail;
     public $TempBoxFail;
+    public $PressureFail;
 
     // constructor with $db as database connection
     public function __construct($db){
@@ -28,7 +29,7 @@ function read(){
   
     // select all query
     $query = "SELECT
-                Location, SampleTime,StateOfCharge, TimeStamp, ResetsCntr, AngleFail, CompassFail, TempAirFail, TempWaterFail, TempBoxFail  
+                Location, SampleTime,StateOfCharge, TimeStamp, ResetsCntr, AngleFail, CompassFail, TempAirFail, TempWaterFail, TempBoxFail, PressureFail  
             FROM
                 " . $this->table_name . " p
             ORDER BY
@@ -60,7 +61,8 @@ function create(){
                 , CompassFail =:CompassFail
                 , TempAirFail =:TempAirFail
                 , TempWaterFail =:TempWaterFail
-                , TempBoxFail =:TempBoxFail";
+                , TempBoxFail =:TempBoxFail
+                , PressureFail =:PressureFail";
   
     // prepare query
     $stmt = $this->conn->prepare($query);
@@ -77,6 +79,7 @@ function create(){
     $this->TempAirFail = htmlspecialchars(strip_tags($this->TempAirFail));
     $this->TempWaterFail = htmlspecialchars(strip_tags($this->TempWaterFail));
     $this->TempBoxFail = htmlspecialchars(strip_tags($this->TempBoxFail));
+    $this->PressureFail = htmlspecialchars(strip_tags($this->PressureFail));
     // bind values
     $stmt->bindParam(":Location", $this->Location);
     $stmt->bindParam(":SampleTime", $this->SampleTime);
@@ -89,6 +92,7 @@ function create(){
     $stmt->bindParam(":TempAirFail", $this->TempAirFail);
     $stmt->bindParam(":TempWaterFail", $this->TempWaterFail);
     $stmt->bindParam(":TempBoxFail", $this->TempBoxFail);
+    $stmt->bindParam(":PressureFail", $this->PressureFail);
     // execute query
     if($stmt->execute()){
         return true;

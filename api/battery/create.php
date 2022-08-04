@@ -38,7 +38,7 @@ if(
     $battery->TempAirFail = $data->TempAirFail;
     $battery->TempWaterFail = $data->TempWaterFail;
     $battery->TempBoxFail = $data->TempBoxFail;
-
+    $battery->PressureFail = $data->PressureFail;
 
   
     // create the battery
